@@ -33,7 +33,7 @@ def getAccount():
 @app.route('/reimburse')
 def reimburse():
     data = '{"payment": {"source_address": "rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7","source_amount": {"value": "2","currency": "XRP"},"destination_address": "rJE3LVb4JjzCqNdZqKEwQuyw2Dev6sQQw","destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
-    response = requests.post(url + '/payments', headers=XPRING_HEADERS, data=data)
+    response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
     return response.json()
 
 # create a route for laywerfunds
