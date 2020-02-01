@@ -1,6 +1,8 @@
 from flask import Flask
 import requests
 
+# initialize flask
+app = Flask(__name__)
 
 # declare some constants
 XPRING_HEADERS = {
@@ -9,17 +11,15 @@ XPRING_HEADERS = {
 }
 XPRING_URL = "http://localhost:3000/v1"
 
-app = Flask(__name__)
-
 # default route
 @app.route('/')
 def index():
     return 'Hello World!'
+
 # create a route for webhook
-@app.route('/webhook')
+@app.route('/wh_initial')
 def hello():
     return 'Hello Hook!'
-
 
 # create a route for getAccount
 @app.route('/getAccount')
@@ -39,6 +39,7 @@ def reimburse():
 @app.route('/lawyerfunds')
 def lawyerfunds():
     return 'Hello HookWorld!'
+
 # run the app
 if __name__ == '__main__':
    app.run()
