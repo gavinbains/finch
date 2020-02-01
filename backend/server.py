@@ -19,14 +19,15 @@ def index():
 # create a route for webhook
 @app.route('/wh_initial')
 def hello():
-    return 'Hello Hook!'
+    # req = request.get_json(force=True)
+    # print(req)
+    return {'fulfillmentText': 'This is a response from webhook.'}
 
 # create a route for getAccount
 @app.route('/getAccount')
 def getAccount():
     response = requests.get(XPRING_URL + '/accounts/rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7/info')
     return response.json()
-
 
 # create a route for reimburse
 @app.route('/reimburse')
