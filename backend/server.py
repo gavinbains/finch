@@ -134,7 +134,7 @@ def getAccount():
 def reimburse():
     data = '{"payment": {"source_address": ' + SOURCEADDR + ',"source_amount": {"value": "2","currency": "XRP"},"destination_address": ' + DESTADDR + ',"destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
     response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
-    print("PAYMENT MADE")
+    print(response.json())
     return response.json()
 
 # create a route for laywerfunds
