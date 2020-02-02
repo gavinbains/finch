@@ -6,15 +6,20 @@ from firebase_admin import firestore
 import json
 
 
-# declare some constants
-CRED = credentials.Certificate("/Users/gbains/dev/finch/backend/finch-c2cd142dfd08.json")   # Use the application default credentials
+# google cloud constants
+CRED = credentials.Certificate("/Users/adithya/Desktop/big-finch-f2bb0512347f.json")   # Use the application default credentials
 COLLECTION_ID = 'immigrants'
+
+# XPRING Constants
 XPRING_HEADERS = {
-    'Authorization': 'Bearer g5scf4ddlgq8im18sd4w0h',
+    'Authorization': 'Bearer c79kaiqjjf6fudu3329wek',
     'Content-Type': 'application/json',
 }
 XPRING_URL = "http://localhost:3000/v1"
+SOURCEADDR = "rUUwxDuTwFNS9Zr9dFq2A285nzsnWd8MXq"
+DESTADDR = "rY7juXVg78bWvqmnSieAbfJywkf72HViN"
 
+# chatbot constants
 IMMIGRANT_DATA = {
     'name': '',
     'alien_id': '',
@@ -28,7 +33,7 @@ IMMIGRANT_DATA = {
     'prev_council': ''
 }
 
-
+# initialize firebase
 firebase_admin.initialize_app(CRED, {
   'projectId': "finch-b50f9",
 })
@@ -37,10 +42,6 @@ db = firestore.client()
 # initialize flask
 app = Flask(__name__)
 
-
-
-SOURCEADDR = "r9eiXPAoYRTWkkaoYMd7DnCwsRArByak2g"
-DESTADDR = "rY7juXVg78bWvqmnSieAbfJywkf72HViN"
 
 # default route
 @app.route('/')
@@ -115,12 +116,10 @@ def webhook_main():
         print('~PREVIOUS COUNCIL?')
         print(prev_council)
 
-    full = True
-    for key in IMMIGRANT_DATA:
-        full &= IMMIGRANT_DATA[key]!=''
 
+    update_db = IMMIGRANT_DATA['alien_id']!='' and IMMIGRANT_DATA['name']!=''
     print(IMMIGRANT_DATA)
-    if(full):
+    if(update_db):
         print("YOUR IMMIGRANT DATA IS COMPLETE")
         doc_ref = db.collection(u'immigrants').document(u'{}'.format(IMMIGRANT_DATA['alien_id']))
         doc_ref.set({
@@ -129,20 +128,26 @@ def webhook_main():
             u'date_of_birth': u'{}'.format(IMMIGRANT_DATA['date_of_birth']),
             u'country_of_birth': u'{}'.format(IMMIGRANT_DATA['country_of_origin']),
             u'detention_center': u'{}'.format(IMMIGRANT_DATA['det_center']),
+            u'point_of_contact':u'{}'.format(IMMIGRANT_DATA['point_of_contact']),
             u'spoken_language': u'{}'.format(IMMIGRANT_DATA['spoken_languages']),
+            u'preferred_language': u'{}'.format(IMMIGRANT_DATA['preferred_languages']),
             u'written_language': u'{}'.format(IMMIGRANT_DATA['written_language']),
             u'previous_represented_by_lawyer': u'{}'.format(IMMIGRANT_DATA['prev_council'])
         })
-        IMMIGRANT_DATA['name'] = ''
-        IMMIGRANT_DATA['alien_id'] = ''
-        IMMIGRANT_DATA['date_of_birth'] = ''
-        IMMIGRANT_DATA['country_of_origin'] = ''
-        IMMIGRANT_DATA['det_center'] = ''
-        IMMIGRANT_DATA['point_of_contact'] = ''
-        IMMIGRANT_DATA['spoken_languages'] = ''
-        IMMIGRANT_DATA['written_language'] = ''
-        IMMIGRANT_DATA['prev_council'] = ''
-    reimburse()
+        full = True
+        for key in IMMIGRANT_DATA:
+            full &= IMMIGRANT_DATA[key]!=''
+        if full:
+            IMMIGRANT_DATA['name'] = ''
+            IMMIGRANT_DATA['alien_id'] = ''
+            IMMIGRANT_DATA['date_of_birth'] = ''
+            IMMIGRANT_DATA['country_of_origin'] = ''
+            IMMIGRANT_DATA['det_center'] = ''
+            IMMIGRANT_DATA['point_of_contact'] = ''
+            IMMIGRANT_DATA['spoken_languages'] = ''
+            IMMIGRANT_DATA['written_language'] = ''
+            IMMIGRANT_DATA['prev_council'] = ''
+    reimburse(1)
     return {'fulfillmentText': fulfillmentText}
 
 
@@ -154,17 +159,17 @@ def getAccount():
 
 # create a route for reimburse
 @app.route('/reimburse')
-def reimburse():
+def reimburse(value=2):
     data = {
         "payment": {
             "source_address": SOURCEADDR,
             "source_amount": {
-                "value": "2",
+                "value": "{}".format(value),
                 "currency": "XRP"
             },
             "destination_address": DESTADDR,
             "destination_amount": {
-                "value": "2",
+                "value": "{}".format(value),
                 "currency": "XRP"
             }
         },
