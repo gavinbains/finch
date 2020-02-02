@@ -21,6 +21,7 @@ IMMIGRANT_DATA = {
     'date_of_birth': '',
     'det_center': '',
     'country_of_origin': '',
+    'point_of_contact': '',
     'spoken_languages': '',
     'preferred_language': '',
     'written_language': '',
@@ -72,9 +73,11 @@ def webhook_main():
         date_of_birth = data['queryResult']['parameters']['dob']
         det_center = data['queryResult']['parameters']['det_center']
         country_of_origin = data['queryResult']['parameters']['origin']
+        point_of_contact = data['queryResult']['parameters']['point_of_contact']
         IMMIGRANT_DATA['date_of_birth'] = date_of_birth
         IMMIGRANT_DATA['det_center'] = det_center
         IMMIGRANT_DATA['country_of_origin'] = country_of_origin
+        IMMIGRANT_DATA['point_of_contact'] = point_of_contact
         fulfillmentText = 'Thank You. This will help a lot. I have a few more questions for you. Do you speak any other languages?'
 
         print('~~LAWYERS CHOICE VALUES:')
@@ -135,10 +138,10 @@ def webhook_main():
         IMMIGRANT_DATA['date_of_birth'] = ''
         IMMIGRANT_DATA['country_of_origin'] = ''
         IMMIGRANT_DATA['det_center'] = ''
+        IMMIGRANT_DATA['point_of_contact'] = ''
         IMMIGRANT_DATA['spoken_languages'] = ''
         IMMIGRANT_DATA['written_language'] = ''
         IMMIGRANT_DATA['prev_council'] = ''
-        
     return {'fulfillmentText': fulfillmentText}
 
 
