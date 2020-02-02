@@ -10,7 +10,8 @@ XPRING_HEADERS = {
     'Content-Type': 'application/json',
 }
 XPRING_URL = "http://localhost:3000/v1"
-
+sourceAddr = "rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7"
+destAddr = "rJE3LVb4JjzCqNdZqKEwQuyw2Dev6sQQw"
 # default route
 @app.route('/')
 def index():
@@ -26,13 +27,13 @@ def hello():
 # create a route for getAccount
 @app.route('/getAccount')
 def getAccount():
-    response = requests.get(XPRING_URL + '/accounts/rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7/info')
+    response = requests.get(XPRING_URL + '/accounts/' + sourceAddr + '/info')
     return response.json()
 
 # create a route for reimburse
 @app.route('/reimburse')
 def reimburse():
-    data = '{"payment": {"source_address": "rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7","source_amount": {"value": "2","currency": "XRP"},"destination_address": "rJE3LVb4JjzCqNdZqKEwQuyw2Dev6sQQw","destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
+    data = '{"payment": {"source_address": ' + sourceAddr + ',"source_amount": {"value": "2","currency": "XRP"},"destination_address": ' + destAddr + ',"destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
     response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
     return response.json()
 
