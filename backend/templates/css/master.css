@@ -1,0 +1,37 @@
+html, body {
+    color: #223;
+    background-color: #fff;
+    font-size: 14pt;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Work Sans', sans-serif;
+    text-rendering: optimizeLegibility;
+}
+th {
+    text-align: left;
+}
+table {
+    border: none;
+    border-collapse: collapse;
+}
+tr {
+    opacity: .5;
+}
+#content:hover {
+    background-color: #eaeff7;
+    opacity: .75;
+}
+th, td {
+    padding: 10px;
+}
+.immigrant-btn {
+    background-color: #1a6de2;
+    border-radius: 5px;
+    width: 200px;
+    height: 60px;
+    color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14pt;
+
+}
