@@ -1,5 +1,17 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template
 import requests
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import json
+
+# Use the application default credentials
+cred = credentials.Certificate("/Users/gbains/dev/finch/backend/finch-c2cd142dfd08.json")
+firebase_admin.initialize_app(cred, {
+  'projectId': "finch-b50f9",
+})
+
+db = firestore.client()
 
 # initialize flask
 app = Flask(__name__)
@@ -41,6 +53,43 @@ def reimburse():
 @app.route('/lawyerfunds')
 def lawyerfunds():
     return 'Hello HookWorld!'
+
+# create a route for laywerfunds
+@app.route('/addImmigrant')
+# name, alien_id, date_of_birth, country_of_birth, detention_center, spoken_language, written_language, previous_represented_by_lawyer
+def addImmigrant():
+    doc_ref = db.collection(u'immigrants').document(u'alovelace')
+    doc_ref.set({
+        u'name': u'Ada Lovelace',
+        u'alien_id': u'1234',
+        u'date_of_birth': u'1815',
+        u'country_of_birth': u'Canada',
+        u'detention_center': u'1234',
+        u'spoken_language': u'English',
+        u'written_language': u'English',
+        u'previous_represented_by_lawyer': False,
+    })
+    return 'ADDED immigrants'
+
+# create a route for laywerfunds
+@app.route('/getImmigrants')
+# name, alien_id, date_of_birth, country_of_birth, detention_center, spoken_language, written_language, previous_represented_by_lawyer
+def getImmigrants():
+    users_ref = db.collection(u'immigrants')
+    docs = users_ref.stream()
+    ans = []
+    for doc in docs:
+        ans += u'{} => {}'.format(doc.id, doc.to_dict())
+        # print(u'{} => {}'.format(doc.id, doc.to_dict()))
+        ans.append(doc.to_dict())
+    return render_template('lawyers.html', movies=ans)
+
+
+@app.after_request
+def add_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    return response
 
 # run the app
 if __name__ == '__main__':
