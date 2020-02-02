@@ -1,0 +1,72 @@
+html, body {
+    color: #223;
+    background-color: #fff;
+    font-size: 12pt;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Work Sans', sans-serif;
+    text-rendering: optimizeLegibility;
+    x-overflow: hidden;
+}
+th {
+    text-align: left;
+}
+#table-wrapper {
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+}
+table {
+    border: none;
+    border-collapse: collapse;
+    box-shadow: 0px 5px 8px rgba(0,0,100,0.2);
+    table-layout: fixed;
+    width: 100%;
+}
+#logo {
+    margin-top: 20px;
+    margin-left: 2.5%;
+    margin-right: auto;
+}
+#content:hover {
+    background-color: #eaeff7;
+    opacity: .75;
+    transition: .2s;
+    box-shadow: 0px 5px 8px rgba(0,0,100,0.2);
+    border-radius: 50px;
+}
+#content {
+    transition: .2s;
+    opacity: .5;
+    border-radius: 5px;
+}
+th, td {
+    padding: 10px;
+    word-wrap: break-word
+}
+.immigrant-btn {
+    background-color: #1a6de2;
+    border-radius: 50px;
+    width: 130px;
+    height: 50px;
+    color: white;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 12pt;
+    outline:0;
+    transition: .2s;
+}
+.immigrant-btn:hover {
+    box-shadow: 0px 5px 8px rgba(0,0,100,0.2);
+    transform: translateY(-2px);
+    transition: .2s;
+    outline:0;
+    cursor: pointer;
+}
+.immigrant-btn:active, .immigrant-btn:after {
+    box-shadow: 0px 5px 8px rgba(0,0,100,0.2);
+    transform: translateY(0px);
+    transition: .2s;
+    outline:0;
+    background-color: #1762cb;
+
+}

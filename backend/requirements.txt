@@ -4,3 +4,7 @@ itsdangerous==1.1.0
 Jinja2==2.11.1
 MarkupSafe==1.1.1
 Werkzeug==0.16.1
+google-api-core[grpc] >= 1.14.0, < 2.0.0dev; platform.python_implementation != 'PyPy'
+google-api-python-client >= 1.7.8
+google-cloud-firestore >= 1.4.0; platform.python_implementation != 'PyPy'
+google-cloud-storage >= 1.18.0
