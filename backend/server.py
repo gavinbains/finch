@@ -47,6 +47,7 @@ def getAccount():
 def reimburse():
     data = '{"payment": {"source_address": ' + sourceAddr + ',"source_amount": {"value": "2","currency": "XRP"},"destination_address": ' + destAddr + ',"destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
     response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
+    print("PAYMENT MADE")
     return response.json()
 
 # create a route for laywerfunds
@@ -79,10 +80,9 @@ def getImmigrants():
     docs = users_ref.stream()
     ans = []
     for doc in docs:
-        ans += u'{} => {}'.format(doc.id, doc.to_dict())
-        # print(u'{} => {}'.format(doc.id, doc.to_dict()))
         ans.append(doc.to_dict())
-    return render_template('lawyers.html', movies=ans)
+    print(ans)
+    return render_template('lawyers.html', immigrants=ans)
 
 
 @app.after_request

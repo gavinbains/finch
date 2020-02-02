@@ -6,10 +6,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Finch</title>
-	<link href='https://fonts.googleapis.com/css?family=work+sans'>
-	<link rel="stylesheet" type="text/css" href="css/master.css">
-	<style>
-	</style>
+	<link href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/master.css') }}">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type=text/javascript>
+	    $(function() {
+	      $('a#test').bind('click', function() {
+	        $.getJSON('/reimburse',
+	            function(data) {
+	          console.log(data)
+	        });
+	        return false;
+	      });
+	    });
+	</script>
 </head>
 
 <body>
@@ -36,24 +46,12 @@
 	  		<td>{{immigrant["spoken_language"]}}</td>
 	  		<td>{{immigrant["written_language"]}}</td>
 	  		<td>{{immigrant["previous_represented_by_lawyer"]}}</td>
-			<td><button class="immigrant-btn">Accept Job</button></td>
+			<!-- <button id='xpringButton' class='immigrant-btn'>Accept Job</button> -->
+			<td><a href=# id=test><button class='immigrant-btn'>Accept Job</button></a></td>
 		  </tr>
 		  {% endfor %}
 		</table>
 	</div>
-
-
-	<script src="rellax.js"></script>
-	<script>
-		var rellax = new Rellax();
-	</script>
-	<script>
-		function openNav() {
-		    document.getElementById("myNav").style.height = "100%";
-		}
-		function closeNav() {
-		    document.getElementById("myNav").style.height = "0%";
-		}
-	</script>
 </body>
+
 </html>
