@@ -7,10 +7,10 @@ import json
 
 
 # declare some constants
-CRED = credentials.Certificate("/Users/adithya/Desktop/big-finch-f2bb0512347f.json")   # Use the application default credentials
+CRED = credentials.Certificate("/Users/gbains/dev/finch/backend/finch-c2cd142dfd08.json")   # Use the application default credentials
 COLLECTION_ID = 'immigrants'
 XPRING_HEADERS = {
-    'Authorization': 'Bearer g280wombfhuxn5o2j6c54',
+    'Authorization': 'Bearer g5scf4ddlgq8im18sd4w0h',
     'Content-Type': 'application/json',
 }
 XPRING_URL = "http://localhost:3000/v1"
@@ -39,7 +39,7 @@ app = Flask(__name__)
 
 
 
-SOURCEADDR = "rnmKAuRm4hd1Eto3nsQBCRD5VrUrqwrvmi"
+SOURCEADDR = "r9eiXPAoYRTWkkaoYMd7DnCwsRArByak2g"
 DESTADDR = "rY7juXVg78bWvqmnSieAbfJywkf72HViN"
 
 # default route
@@ -142,6 +142,7 @@ def webhook_main():
         IMMIGRANT_DATA['spoken_languages'] = ''
         IMMIGRANT_DATA['written_language'] = ''
         IMMIGRANT_DATA['prev_council'] = ''
+    reimburse()
     return {'fulfillmentText': fulfillmentText}
 
 
@@ -154,15 +155,24 @@ def getAccount():
 # create a route for reimburse
 @app.route('/reimburse')
 def reimburse():
-    data = '{"payment": {"source_address": ' + SOURCEADDR + ',"source_amount": {"value": "2","currency": "XRP"},"destination_address": ' + DESTADDR + ',"destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
-    response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
+    data = {
+        "payment": {
+            "source_address": SOURCEADDR,
+            "source_amount": {
+                "value": "2",
+                "currency": "XRP"
+            },
+            "destination_address": DESTADDR,
+            "destination_amount": {
+                "value": "2",
+                "currency": "XRP"
+            }
+        },
+        "submit": True
+    }
+    response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=json.dumps(data))
     print(response.json())
     return response.json()
-
-# create a route for laywerfunds
-@app.route('/lawyerfunds')
-def lawyerfunds():
-    return 'Hello HookWorld!'
 
 # create a route for laywerfunds
 @app.route('/addImmigrant')
