@@ -7,7 +7,8 @@ import json
 
 
 # declare some constants
-CRED = credentials.Certificate("/Users/gbains/dev/finch/backend/finch-c2cd142dfd08.json")   # Use the application default credentials
+CRED = credentials.Certificate("/Users/adithya/Desktop/big-finch-f2bb0512347f.json")   # Use the application default credentials
+COLLECTION_ID = 'immigrants'
 XPRING_HEADERS = {
     'Authorization': 'Bearer g280wombfhuxn5o2j6c54',
     'Content-Type': 'application/json',
@@ -115,11 +116,29 @@ def webhook_main():
     for key in IMMIGRANT_DATA:
         full &= IMMIGRANT_DATA[key]!=''
 
-    print("FULL? {}".format(full))
     print(IMMIGRANT_DATA)
     if(full):
-        print("YOUR IMMIGRANT DATA IS FULL")
-
+        print("YOUR IMMIGRANT DATA IS COMPLETE")
+        doc_ref = db.collection(u'immigrants').document(u'{}'.format(IMMIGRANT_DATA['alien_id']))
+        doc_ref.set({
+            u'name': u'{}'.format(IMMIGRANT_DATA['name']),
+            u'alien_id': u'{}'.format(IMMIGRANT_DATA['alien_id']),
+            u'date_of_birth': u'{}'.format(IMMIGRANT_DATA['date_of_birth']),
+            u'country_of_birth': u'{}'.format(IMMIGRANT_DATA['country_of_origin']),
+            u'detention_center': u'{}'.format(IMMIGRANT_DATA['det_center']),
+            u'spoken_language': u'{}'.format(IMMIGRANT_DATA['spoken_languages']),
+            u'written_language': u'{}'.format(IMMIGRANT_DATA['written_language']),
+            u'previous_represented_by_lawyer': u'{}'.format(IMMIGRANT_DATA['prev_council'])
+        })
+        IMMIGRANT_DATA['name'] = ''
+        IMMIGRANT_DATA['alien_id'] = ''
+        IMMIGRANT_DATA['date_of_birth'] = ''
+        IMMIGRANT_DATA['country_of_origin'] = ''
+        IMMIGRANT_DATA['det_center'] = ''
+        IMMIGRANT_DATA['spoken_languages'] = ''
+        IMMIGRANT_DATA['written_language'] = ''
+        IMMIGRANT_DATA['prev_council'] = ''
+        
     return {'fulfillmentText': fulfillmentText}
 
 
@@ -145,7 +164,7 @@ def lawyerfunds():
 @app.route('/addImmigrant')
 # name, alien_id, date_of_birth, country_of_birth, detention_center, spoken_language, written_language, previous_represented_by_lawyer
 def addImmigrant():
-    doc_ref = db.collection(u'immigrants').document(u'alovelace')
+    doc_ref = db.collection(u'{}'.format(COLLECTION_ID)).document(u'alovelace')
     doc_ref.set({
         u'name': u'Ada Lovelace',
         u'alien_id': u'1234',
@@ -177,6 +196,8 @@ def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     return response
+
+
 
 # run the app
 if __name__ == '__main__':
