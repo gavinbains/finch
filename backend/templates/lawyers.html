@@ -12,9 +12,12 @@
 	<script type=text/javascript>
 	    $(function() {
 	      $('a#test').bind('click', function() {
-	        $.getJSON('/reimburse',
-	            function(data) {
-	          console.log(data)
+	        $.getJSON('/reimburse', function(data) {
+						console.log(data["tx_json"]);
+						amount = data["tx_json"]['Amount'];
+						hash = data["tx_json"]['hash'];
+						$("#xpring-amount").text(amount);
+						$("#xpring-hash").text(hash);
 	        });
 	        return false;
 	      });
