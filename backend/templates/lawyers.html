@@ -1,10 +1,59 @@
-<!-- lawyers.html -->
+<!DOCTYPE html>
+<html lang="en">
 
-<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Finch</title>
+	<link href='https://fonts.googleapis.com/css?family=work+sans'>
+	<link rel="stylesheet" type="text/css" href="css/master.css">
+	<style>
+	</style>
+</head>
+
 <body>
-  <h1>Immigrants</h1>
-  {% for movie in movies %}
-    <div>{{movie["name"]}}</div>
-  {% endfor %}
+	<div style="height: 100px;"></div>
+	<div id="table-wrapper">
+		<table id="immigrant-table">
+		  <tr id="header">
+		    <th>Name</th>
+		    <th>Alien ID</th>
+		    <th>Date of Birth</th>
+			<th>Country of Birth</th>
+			<th>Detention Center</th>
+			<th>Spoken Language</th>
+			<th>Written Language</th>
+			<th>Previous Counsel</th>
+		  </tr>
+		  {% for immigrant in immigrants %}
+		  <tr id="content">
+			<td>{{immigrant["name"]}}</td>
+	  	    <td>{{immigrant["alien_id"]}}</td>
+	  	    <td>{{immigrant["date_of_birth"]}}</td>
+	  		<td>{{immigrant["country_of_birth"]}}</td>
+	  		<td>{{immigrant["detention_center"]}}</td>
+	  		<td>{{immigrant["spoken_language"]}}</td>
+	  		<td>{{immigrant["written_language"]}}</td>
+	  		<td>{{immigrant["previous_represented_by_lawyer"]}}</td>
+			<td><button class="immigrant-btn">Accept Job</button></td>
+		  </tr>
+		  {% endfor %}
+		</table>
+	</div>
+
+
+	<script src="rellax.js"></script>
+	<script>
+		var rellax = new Rellax();
+	</script>
+	<script>
+		function openNav() {
+		    document.getElementById("myNav").style.height = "100%";
+		}
+		function closeNav() {
+		    document.getElementById("myNav").style.height = "0%";
+		}
+	</script>
 </body>
 </html>
