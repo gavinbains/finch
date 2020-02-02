@@ -8,8 +8,9 @@ import json
 
 # declare some constants
 CRED = credentials.Certificate("/Users/gbains/dev/finch/backend/finch-c2cd142dfd08.json")   # Use the application default credentials
+COLLECTION_ID = 'immigrants'
 XPRING_HEADERS = {
-    'Authorization': 'Bearer g280wombfhuxn5o2j6c54',
+    'Authorization': 'Bearer g5scf4ddlgq8im18sd4w0h',
     'Content-Type': 'application/json',
 }
 XPRING_URL = "http://localhost:3000/v1"
@@ -37,8 +38,8 @@ app = Flask(__name__)
 
 
 
-SOURCEADDR = "rwdy5m8YSYuvWcLxtPpm5ute7neWjA5Hr7"
-DESTADDR = "rJE3LVb4JjzCqNdZqKEwQuyw2Dev6sQQw"
+SOURCEADDR = "r9eiXPAoYRTWkkaoYMd7DnCwsRArByak2g"
+DESTADDR = "rY7juXVg78bWvqmnSieAbfJywkf72HViN"
 
 # default route
 @app.route('/')
@@ -115,10 +116,28 @@ def webhook_main():
     for key in IMMIGRANT_DATA:
         full &= IMMIGRANT_DATA[key]!=''
 
-    print("FULL? {}".format(full))
     print(IMMIGRANT_DATA)
     if(full):
-        print("YOUR IMMIGRANT DATA IS FULL")
+        print("YOUR IMMIGRANT DATA IS COMPLETE")
+        doc_ref = db.collection(u'immigrants').document(u'{}'.format(IMMIGRANT_DATA['alien_id']))
+        doc_ref.set({
+            u'name': u'{}'.format(IMMIGRANT_DATA['name']),
+            u'alien_id': u'{}'.format(IMMIGRANT_DATA['alien_id']),
+            u'date_of_birth': u'{}'.format(IMMIGRANT_DATA['date_of_birth']),
+            u'country_of_birth': u'{}'.format(IMMIGRANT_DATA['country_of_origin']),
+            u'detention_center': u'{}'.format(IMMIGRANT_DATA['det_center']),
+            u'spoken_language': u'{}'.format(IMMIGRANT_DATA['spoken_languages']),
+            u'written_language': u'{}'.format(IMMIGRANT_DATA['written_language']),
+            u'previous_represented_by_lawyer': u'{}'.format(IMMIGRANT_DATA['prev_council'])
+        })
+        IMMIGRANT_DATA['name'] = ''
+        IMMIGRANT_DATA['alien_id'] = ''
+        IMMIGRANT_DATA['date_of_birth'] = ''
+        IMMIGRANT_DATA['country_of_origin'] = ''
+        IMMIGRANT_DATA['det_center'] = ''
+        IMMIGRANT_DATA['spoken_languages'] = ''
+        IMMIGRANT_DATA['written_language'] = ''
+        IMMIGRANT_DATA['prev_council'] = ''
 
     return {'fulfillmentText': fulfillmentText}
 
@@ -132,20 +151,30 @@ def getAccount():
 # create a route for reimburse
 @app.route('/reimburse')
 def reimburse():
-    data = '{"payment": {"source_address": ' + SOURCEADDR + ',"source_amount": {"value": "2","currency": "XRP"},"destination_address": ' + DESTADDR + ',"destination_amount": {"value": "2","currency": "XRP"}},"submit": true}'
-    response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=data)
+    data = {
+        "payment": {
+            "source_address": SOURCEADDR,
+            "source_amount": {
+                "value": "2",
+                "currency": "XRP"
+            },
+            "destination_address": DESTADDR,
+            "destination_amount": {
+                "value": "2",
+                "currency": "XRP"
+            }
+        },
+        "submit": True
+    }
+    response = requests.post(XPRING_URL + '/payments', headers=XPRING_HEADERS, data=json.dumps(data))
+    print(response.json())
     return response.json()
-
-# create a route for laywerfunds
-@app.route('/lawyerfunds')
-def lawyerfunds():
-    return 'Hello HookWorld!'
 
 # create a route for laywerfunds
 @app.route('/addImmigrant')
 # name, alien_id, date_of_birth, country_of_birth, detention_center, spoken_language, written_language, previous_represented_by_lawyer
 def addImmigrant():
-    doc_ref = db.collection(u'immigrants').document(u'alovelace')
+    doc_ref = db.collection(u'{}'.format(COLLECTION_ID)).document(u'alovelace')
     doc_ref.set({
         u'name': u'Ada Lovelace',
         u'alien_id': u'1234',
@@ -166,10 +195,9 @@ def getImmigrants():
     docs = users_ref.stream()
     ans = []
     for doc in docs:
-        ans += u'{} => {}'.format(doc.id, doc.to_dict())
-        # print(u'{} => {}'.format(doc.id, doc.to_dict()))
         ans.append(doc.to_dict())
-    return render_template('lawyers.html', movies=ans)
+    print(ans)
+    return render_template('lawyers.html', immigrants=ans)
 
 
 @app.after_request
@@ -177,6 +205,8 @@ def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     return response
+
+
 
 # run the app
 if __name__ == '__main__':

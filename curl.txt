@@ -1,0 +1,24 @@
+-- MAKE PAYMENT --
+curl -X POST \
+   http://localhost:3000/v1/payments \
+   -H 'Authorization: Bearer g5scf4ddlgq8im18sd4w0h' \
+   -H 'Content-Type: application/json' \
+   -d '{
+     "payment": {
+         "source_address": "r9eiXPAoYRTWkkaoYMd7DnCwsRArByak2g",
+         "source_amount": {
+             "value": "20",
+             "currency": "XRP"
+         },
+         "destination_address": "rY7juXVg78bWvqmnSieAbfJywkf72HViN",
+         "destination_amount": {
+             "value": "20",
+             "currency": "XRP"
+         }
+     },
+     "submit": true
+ }'
+
+-- GET WALLET --
+ curl -X GET \
+   http://localhost:3000/v1/accounts/{ACCOUNT_ADDRESS_HERE}/info
